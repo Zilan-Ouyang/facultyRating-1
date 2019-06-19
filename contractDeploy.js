@@ -2,18 +2,49 @@ const ethers = require('ethers');
 require('dotenv').config()
 let contractDetail = require('./build/contracts/FacultyRating.json')
 let provider = ethers.getDefaultProvider('ropsten');
+let mainnetProvider = ethers.getDefaultProvider('homestead');
+
+
 let ABI = contractDetail.abiDefinition;
 //console.log(ABI)
-let bytecode = contractDetail.code;
+let bytebode = contractDetail.code;
+//create readOnly wallet
+let readOnlyWallet = new ethers.Wallet(process.env.pk)
+//read and write only wallet
+let readAndWriteRopsten = readOnlyWallet.connect(provider);
+let myWallet = new ethers.Wallet(process.env.pk, provider) //readOnly
 
-let myWallet = new ethers.Wallet(process.env.pk, provider)
+let contractFactory = new ethers.ContractFactory(ABI, bytebode, myWallet);
+let contractAddress = "0x5B909f9Fc4f0F74B0c480E437AfE337cE0d7b989";
+//Deploy contract
+// async function deployContract(){
+//     let contract = await contractFactory.deploy();
+//     await contract.deployed();
+//     console.log(contract)
+// }
+// deployContract();
 
-let contractFactory = new ethers.ContractFactory(ABI, bytecode, myWallet);
 
-async function deployContract(){
-    let contract = await contractFactory.deploy(["0x5dc59f8f0d5a190068424a9006cf583e7abdd64c"],["0xcb88b6b42c802aed732829bd30416ff962616be0"]);
-    await contract.deployed();
-    console.log(contract)
+//interacting with contract
+let contract = new ethers.Contract(contractAddress, ABI, myWallet).connect(provider); //READONLY contract
+//console.log(contract)
+let newContract = contract.connect(myWallet); //ReadAndWrite contract
+console.log(newContract)
+
+//call funtions 
+async function isWhiteListed(){
+    let tx = await newContract.isWhiteListed('0xaebcc94558237bd8da20accb9e7bd8113c1c63dc');
+    console.log("whitelisted???: ", tx);
 }
-deployContract();
+//isWhiteListed();
+async function addWhiteList(){
+    let tx = await newContract.addWhiteList('0xaebcc94558237bd8da20accb9e7bd8113c1c63dc');
+    console.log("add to whitelist?? :", tx)
+}
+addWhiteList();
+//event listener
 
+newContract.on("addToWhitelist", (author, val) => {
+    console.log("author: ", author);
+    console.loh("student:", val)
+})

@@ -17,7 +17,8 @@ contract FacultyRating {
     }
     mapping (address => rateInfo ) private teachers;
 
-    
+    event addToWhitelit(address indexed author, address _student);
+
     constructor(address[] memory _students, address [] memory _teachers) public {
         admin = msg.sender;
         
@@ -37,7 +38,7 @@ contract FacultyRating {
         _;
     }
     
-    function isWhiteListed(address _student) public returns(bool) {
+    function isWhiteListed(address _student) public view returns(bool) {
         require(_student != address(0), "Account is zero address");
         return whiteList[_student];
     }
@@ -45,6 +46,7 @@ contract FacultyRating {
     function addWhiteList(address _student) public onlyAdmin{
         require(!isWhiteListed(_student), "The account is already exist");
         whiteList[_student] = true;
+        emit addToWhitelit(msg.sender, address _student);
     }
     
     function removeFromWhiteList(address _student) public onlyAdmin {
