@@ -46,5 +46,5 @@ addWhiteList();
 
 newContract.on("addToWhitelist", (author, val) => {
     console.log("author: ", author);
-    console.loh("student:", val)
+    console.log("student:", val)
 })
