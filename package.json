@@ -11,5 +11,12 @@
   "devDependencies": {
     "embarkjs-connector-web3": "^4.0.0"
   },
-  "gitHead": "21f5367bebe10594ffcc26f3aa4b574b1226472a"
+  "gitHead": "21f5367bebe10594ffcc26f3aa4b574b1226472a",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.0.0",
+    "embark": "^4.0.2",
+    "ethers": "^4.0.31",
+    "express": "^4.17.1"
+  }
 }

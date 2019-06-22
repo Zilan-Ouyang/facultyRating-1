@@ -46,7 +46,7 @@ contract FacultyRating {
     function addWhiteList(address _student) public onlyAdmin{
         require(!isWhiteListed(_student), "The account is already exist");
         whiteList[_student] = true;
-        emit addToWhitelit(msg.sender, address _student);
+        emit addToWhitelit(msg.sender, _student);
     }
     
     function removeFromWhiteList(address _student) public onlyAdmin {
